@@ -162,7 +162,9 @@ class ZatController extends Controller
         // Print raw response
         return response()->json([
             'status'   => $response->status(),
-            'response' => $response->json(),
+            'json'     => $response->json(),   // parsed JSON (if valid)
+            'body'     => $response->body(),   // raw body (always)
+            'headers'  => $response->headers(),
         ]);
 
     }
