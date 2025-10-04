@@ -12,11 +12,8 @@ use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 
 const ROOT_PATH=__DIR__ ;
-use Illuminate\Http\Request;
 
 class ZatController extends Controller
 {
@@ -80,28 +77,21 @@ class ZatController extends Controller
         // New Keys & CSR for the EGS
         /*list($private_key, $csr) = $egs->generateNewKeysAndCSR('Qr');
         echo $private_key;
-
         echo */
         list($private_key, $csr) = $egs->generateNewKeysAndCSR('Qr');
-
-        echo "\n Private Key:\n";
-        echo $private_key . "\n\n";
-            echo "CSR:\n";
-        echo $csr . "\n\n\n";
+        echo 'Private Key:\n\n' . $private_key . "<br>";
+        echo 'csr:\n\n' . $csr . "<br>";
         
         // Issue a new compliance cert for the EGS
         list($request_id, $binary_security_token, $secret) = $egs->issueComplianceCertificate('123345', $csr);
-        echo "secret:\n";
-        echo $secret. "\n";  
+        echo 'secret:\n\n' . $secret . "<br>";
+
         // Sign invoice
         list($signed_invoice_string, $invoice_hash, $qr,$public_key) = $egs->signInvoice($invoice, $egs_unit, $binary_security_token, $private_key);
-        echo "\n\n public key:\n";
-        //echo $signed_invoice_string. "\n\n\n";
 
         $base64_encoded = base64_encode($signed_invoice_string);
 
         // Output the Base64 encoded string
-        echo $base64_encoded;
         //$file_path =base_path().'/tmp/invoice.xml';
         $file_path = storage_path('app/invoices/invoice.xml');
 
@@ -112,13 +102,12 @@ class ZatController extends Controller
             
             // Create a new file
             file_put_contents($file_path, '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL . '<invoices></invoices>');
-            
-            echo "File created: $file_path";
+            echo 'File created:\n\n' . $file_path . "<br>";
         } else {
         }
         // Save the XML string to the file
         if (file_put_contents($file_path, $signed_invoice_string) !== false) {
-            echo "Invoice saved successfully to $file_path.\n";
+            echo 'Invoice saved successfully to:\n\n' . $file_path . "<br>";
         } else {
             echo "Failed to save the invoice.\n";
         }
@@ -136,27 +125,10 @@ class ZatController extends Controller
 
         // Writer
         $writer = new PngWriter();
-
-        $writer = new PngWriter();
-
-        // Logo (use constructor instead of ::create)
-        $logo = new Logo(
-            path: public_path('logo.jpg'),
-            resizeToWidth: 50,
-            punchoutBackground: true
-        );
-
-        // Label (use constructor instead of ::create)
-        $label = new Label(
-            text: 'Qr Phase-2',
-            textColor: new Color(255, 0, 0)
-        );
-
-        // Generate QR Code with logo + label
-        $result = $writer->write($qrCode, $logo, $label);
-
+        $result = $writer->write($qrCode);
         // Save to file
         $result->saveToFile(public_path('assets/phase-2.png'));
+        echo 'qr code saved:\n\n' . public_path('assets/phase-2.png') . "<br>";
 
     }
 }
