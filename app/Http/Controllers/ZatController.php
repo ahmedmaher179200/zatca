@@ -155,7 +155,7 @@ class ZatController extends Controller
             'invoice'     => base64_encode($signed_invoice_string), // single encode only
         ];
 
-        $curl = curl_init('https://gw-fatoora.zatca.gov.sa/e-invoicing/simulation/invoices/reporting/single');
+        $curl = curl_init('https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single');
 
         curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => true,
@@ -164,16 +164,17 @@ class ZatController extends Controller
             CURLOPT_POSTFIELDS     => json_encode($payload),
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_SSLVERSION     => CURL_SSLVERSION_TLSv1_2,
+            CURLOPT_VERBOSE        => true, // debug
         ]);
 
         $response = curl_exec($curl);
 
         if (curl_errno($curl)) {
-            echo 'Curl error: ' . curl_error($curl);
+            echo "cURL Error #: " . curl_errno($curl) . " - " . curl_error($curl) . "\n";
         } else {
             $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-            echo "<br>HTTP Code: $httpCode<br>";
-            echo "Response: " . htmlspecialchars($response) . "<br>";
+            echo "HTTP Code: $httpCode\n";
+            echo "Response: " . $response . "\n";
         }
 
         curl_close($curl);
