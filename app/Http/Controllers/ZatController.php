@@ -153,7 +153,7 @@ class ZatController extends Controller
             ])->withHeaders([
                 'Content-Type'   => 'application/json',
                 'Accept-Version' => '1.2.0',
-                'Authorization'  => 'Bearer ' . $binary_security_token,
+                'Authorization'  => 'Bearer ' . $binarySecurityToken2,
                     'Accept-Language: en',
             ])->post('https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single', [
                 'invoiceHash' => $invoice_hash,
