@@ -145,13 +145,17 @@ class ZatController extends Controller
         $headers = [
             'Accept-Version: V2',
             'Content-Type: application/json',
-            'Authorization: Bearer ' . $binary_security_token, // from compliance step
+            'Accept-Language: en',
+            'Authorization: Bearer ' . $binary_security_token,
         ];
 
-        // =====================
-        // 3. Make API Call
-        // =====================
-        $curl = curl_init('https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single');
+        $payload = [
+            'invoiceHash' => $invoice_hash,
+            'uuid'        => $egs_unit['uuid'],
+            'invoice'     => base64_encode($signed_invoice_string), // single encode only
+        ];
+
+        $curl = curl_init('https://gw-fatoora.zatca.gov.sa/e-invoicing/simulation/invoices/reporting/single');
 
         curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => true,
@@ -159,6 +163,7 @@ class ZatController extends Controller
             CURLOPT_HTTPHEADER     => $headers,
             CURLOPT_POSTFIELDS     => json_encode($payload),
             CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSLVERSION     => CURL_SSLVERSION_TLSv1_2,
         ]);
 
         $response = curl_exec($curl);
