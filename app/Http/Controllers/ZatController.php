@@ -157,6 +157,12 @@ class ZatController extends Controller
         ];
 
         try {
+            dd([
+                'invoiceHash' => $invoice_hash,
+                'uuid'        => $egs_unit['uuid'],
+                'invoice'     => base64_encode($signed_invoice_string), // only once!
+            ]);
+            dd($binary_security_token);
             $response = Http::withHeaders([
                 'Accept-Version' => 'V2',
                 'Content-Type'   => 'application/json',
