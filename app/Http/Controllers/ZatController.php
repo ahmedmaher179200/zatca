@@ -160,12 +160,14 @@ class ZatController extends Controller
             $response = Http::withHeaders([
                 'Accept-Version' => 'V2',
                 'Content-Type'   => 'application/json',
-                'Authorization'  => 'Bearer ' . $binary_security_token,
+                'Authorization'  => 'Bearer ' . $binary_security_token, // ✅ only the token, no PEM
             ])->withOptions([
-                'verify' => true, // SSL verify
-                'version' => CURL_SSLVERSION_TLSv1_2, // enforce TLS 1.2
-            ])->post('https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single', $payload);
-
+                'verify' => true,
+                'version' => CURL_SSLVERSION_TLSv1_2,
+            ])->post(
+                'https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single',
+                $payload
+            );
             // Print raw response
             return response()->json([
                 'status'   => $response->status(),
