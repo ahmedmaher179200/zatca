@@ -91,7 +91,7 @@ class ZatController extends Controller
         echo 'invoice_hash:' . $invoice_hash . "<br>";
         echo 'uuid:' . $egs_unit['uuid'] . "<br>";
         $base64_encoded = base64_encode($signed_invoice_string);
-        dd('test');
+        dd($signed_invoice_string);
         echo 'invoice:' . base64_encode($signed_invoice_string) . "<br>";
 
         // Output the Base64 encoded string
