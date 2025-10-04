@@ -102,11 +102,9 @@ $base64_encoded = base64_encode($signed_invoice_string);
 // Output the Base64 encoded string
 echo $base64_encoded;
 //$file_path =base_path().'/tmp/invoice.xml';
-$file_path = base_path() . '/public/invoice/invoice.xml';
+$file_path = storage_path('app/invoices/invoice.xml');
 
-// Check if the file exists
 if (!file_exists($file_path)) {
-    // Create the directory if it doesn't exist
     if (!is_dir(dirname($file_path))) {
         mkdir(dirname($file_path), 0755, true);
     }
