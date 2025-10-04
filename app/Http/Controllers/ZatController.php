@@ -13,6 +13,7 @@ use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 
 const ROOT_PATH=__DIR__ ;
 use Illuminate\Http\Request;
@@ -124,24 +125,30 @@ if (file_put_contents($file_path, $signed_invoice_string) !== false) {
 
 
 // Generate QR Code
-$qrCode = QrCode::create($qr)
-    ->setEncoding(new Encoding('UTF-8'))
-    ->setErrorCorrectionLevel(ErrorCorrectionLevel::High)
+$qrCode = new QrCode($qr);
+$qrCode->setEncoding(new Encoding('UTF-8'))
+    ->setErrorCorrectionLevel(new ErrorCorrectionLevelHigh())
     ->setSize(300)
     ->setMargin(10)
     ->setForegroundColor(new Color(0, 0, 0))
     ->setBackgroundColor(new Color(255, 255, 255));
 
-// Save QR Code to file
+// Create Writer
 $writer = new PngWriter();
-$logo = Logo::create(ROOT_PATH. '/ZATCA/assets/logo.png')
+
+// Add Logo
+$logo = Logo::create(ROOT_PATH . '/ZATCA/assets/logo.png')
     ->setResizeToWidth(50)
     ->setPunchoutBackground(true);
 
+// Add Label
 $label = Label::create('Qr Phase-2')
     ->setTextColor(new Color(255, 0, 0));
 
+// Generate QR Code with logo + label
 $result = $writer->write($qrCode, $logo, $label);
+
+// Save to file
 $result->saveToFile(ROOT_PATH . '/ZATCA/assets/phase-2.png');
 
 header('Content-Type: ' . $result->getMimeType()); 
