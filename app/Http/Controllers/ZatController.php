@@ -147,14 +147,13 @@ class ZatController extends Controller
             'uuid'        => $egs_unit['uuid'],
             'invoice'     => base64_encode($signed_invoice_string), // only once!
         ];
-        dd('Bearer ' . $binarySecurityToken2);
         try {
             $response = Http::withOptions([
                 'version' => CURL_HTTP_VERSION_1_1, // 👈 force HTTP/1.1
             ])->withHeaders([
                 'Content-Type'   => 'application/json',
                 'Accept-Version' => '1.2.0',
-                'Authorization'  => 'Bearer ' . $binarySecurityToken2,
+                'Authorization'  => 'Bearer ' . $binarySecurityToken,
                     'Accept-Language: en',
             ])->post('https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single', [
                 'invoiceHash' => $invoice_hash,
