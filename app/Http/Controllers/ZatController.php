@@ -158,7 +158,4 @@ $result = $writer->write($qrCode, $logo, $label);
 // Save to file
 $result->saveToFile(public_path('assets/phase-2.png'));
 
-header('Content-Type: ' . $result->getMimeType()); 
-       // return redirect()->route('task.create');
-    }
 }
