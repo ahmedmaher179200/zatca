@@ -84,9 +84,9 @@ class ZatController extends Controller
         //echo 'csr:' . $csr . "<br>";
         
         // Issue a new compliance cert for the EGS
-        list($request_id, $binary_security_token, $secret) = $egs->issueComplianceCertificate('123345', $csr);
+        list($request_id, $binary_security_token, $secret, $binarySecurityToken2) = $egs->issueComplianceCertificate('123345', $csr);
         //echo 'secret:' . $secret . "<br>";
-
+        dd($binarySecurityToken2);
         // Sign invoice
         list($signed_invoice_string, $invoice_hash, $qr,$public_key) = $egs->signInvoice($invoice, $egs_unit, $binary_security_token, $private_key);
         //echo 'invoice_hash:' . $invoice_hash . "<br>";
@@ -143,13 +143,6 @@ class ZatController extends Controller
         // =====================
         // 2. Prepare the headers
         // =====================
-        $headers = [
-            'Accept-Version: V2',
-            'Content-Type: application/json',
-            'Accept-Language: en',
-            'Authorization: Bearer ' . $binary_security_token,
-        ];
-
         $payload = [
             'invoiceHash' => $invoice_hash,
             'uuid'        => $egs_unit['uuid'],
@@ -157,17 +150,11 @@ class ZatController extends Controller
         ];
 
         try {
-            dd([
-                'invoiceHash' => $invoice_hash,
-                'uuid'        => $egs_unit['uuid'],
-                'invoice'     => base64_encode($signed_invoice_string), // only once!
-                'Authorization'     => 'Bearer ' . $binary_security_token, // only once!
-            ]);
-            dd($binary_security_token);
             $response = Http::withHeaders([
                 'Accept-Version' => 'V2',
                 'Content-Type'   => 'application/json',
-                'Authorization'  => 'Bearer ' . $binary_security_token, // ✅ only the token, no PEM
+                'Accept-Language: en',
+                'Authorization'  => 'Bearer ' . $binarySecurityToken2, // ✅ only the token, no PEM
             ])->withOptions([
                 'verify' => true,
                 'version' => CURL_SSLVERSION_TLSv1_2,
