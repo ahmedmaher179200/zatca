@@ -76,22 +76,22 @@ class ZatController extends Controller
 
         // New Keys & CSR for the EGS
         /*list($private_key, $csr) = $egs->generateNewKeysAndCSR('Qr');
-        echo $private_key;
-        echo */
+        //echo $private_key;
+        //echo */
         list($private_key, $csr) = $egs->generateNewKeysAndCSR('Qr');
-        echo 'Private Key:' . $private_key . "<br>";
-        echo 'csr:' . $csr . "<br>";
+        //echo 'Private Key:' . $private_key . "<br>";
+        //echo 'csr:' . $csr . "<br>";
         
         // Issue a new compliance cert for the EGS
         list($request_id, $binary_security_token, $secret) = $egs->issueComplianceCertificate('123345', $csr);
-        echo 'secret:' . $secret . "<br>";
+        //echo 'secret:' . $secret . "<br>";
 
         // Sign invoice
         list($signed_invoice_string, $invoice_hash, $qr,$public_key) = $egs->signInvoice($invoice, $egs_unit, $binary_security_token, $private_key);
-        echo 'invoice_hash:' . $invoice_hash . "<br>";
-        echo 'uuid:' . $egs_unit['uuid'] . "<br>";
+        //echo 'invoice_hash:' . $invoice_hash . "<br>";
+        //echo 'uuid:' . $egs_unit['uuid'] . "<br>";
         $base64_encoded = base64_encode($signed_invoice_string);
-        echo 'invoice:' . base64_encode($base64_encoded) . "<br>";
+        //echo 'invoice:' . base64_encode($base64_encoded) . "<br>";
 
         // Output the Base64 encoded string
         //$file_path =base_path().'/tmp/invoice.xml';
@@ -104,14 +104,14 @@ class ZatController extends Controller
             
             // Create a new file
             file_put_contents($file_path, '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL . '<invoices></invoices>');
-            echo 'File created:' . $file_path . "<br>";
+            //echo 'File created:' . $file_path . "<br>";
         } else {
         }
         // Save the XML string to the file
         if (file_put_contents($file_path, $signed_invoice_string) !== false) {
-            echo 'Invoice saved successfully to:' . $file_path . "<br>";
+            //echo 'Invoice saved successfully to:' . $file_path . "<br>";
         } else {
-            echo "Failed to save the invoice.\n";
+            //echo "Failed to save the invoice.\n";
         }
 
 
@@ -130,7 +130,7 @@ class ZatController extends Controller
         $result = $writer->write($qrCode);
         // Save to file
         $result->saveToFile(public_path('assets/phase-2.png'));
-        echo 'qr code saved:' . public_path('assets/phase-2.png') . "<br>";
+        //echo 'qr code saved:' . public_path('assets/phase-2.png') . "<br>";
 
 
         $payload = [
