@@ -84,7 +84,6 @@ class ZatController extends Controller
         
         // Issue a new compliance cert for the EGS
         list($request_id, $binary_security_token, $secret) = $egs->issueComplianceCertificate('123345', $csr);
-        echo 'binary_security_token:' . $binary_security_token . "<br>";
         echo 'secret:' . $secret . "<br>";
 
         // Sign invoice
@@ -132,6 +131,47 @@ class ZatController extends Controller
         // Save to file
         $result->saveToFile(public_path('assets/phase-2.png'));
         echo 'qr code saved:' . public_path('assets/phase-2.png') . "<br>";
+
+
+        $payload = [
+            'invoiceHash' => $invoice_hash,
+            'uuid'        => $egs_unit['uuid'],
+            'invoice'     => $base64_encoded,
+        ];
+
+        // =====================
+        // 2. Prepare the headers
+        // =====================
+        $headers = [
+            'Accept-Version: V2',
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $binary_security_token, // from compliance step
+        ];
+
+        // =====================
+        // 3. Make API Call
+        // =====================
+        $curl = curl_init('https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single');
+
+        curl_setopt_array($curl, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_HTTPHEADER     => $headers,
+            CURLOPT_POSTFIELDS     => json_encode($payload),
+            CURLOPT_SSL_VERIFYPEER => true,
+        ]);
+
+        $response = curl_exec($curl);
+
+        if (curl_errno($curl)) {
+            echo 'Curl error: ' . curl_error($curl);
+        } else {
+            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            echo "<br>HTTP Code: $httpCode<br>";
+            echo "Response: " . htmlspecialchars($response) . "<br>";
+        }
+
+        curl_close($curl);
 
     }
 }
