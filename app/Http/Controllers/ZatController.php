@@ -137,16 +137,22 @@ $qrCode = new QrCode(
 // Writer
 $writer = new PngWriter();
 
-// Logo
-$logo = Logo::create(ROOT_PATH . '/ZATCA/assets/logo.png')
-    ->setResizeToWidth(50)
-    ->setPunchoutBackground(true);
+$writer = new PngWriter();
 
-// Label
-$label = Label::create('Qr Phase-2')
-    ->setTextColor(new Color(255, 0, 0));
+// Logo (use constructor instead of ::create)
+$logo = new Logo(
+    path: ROOT_PATH . '/ZATCA/assets/logo.png',
+    resizeToWidth: 50,
+    punchoutBackground: true
+);
 
-// Generate QR Code
+// Label (use constructor instead of ::create)
+$label = new Label(
+    text: 'Qr Phase-2',
+    textColor: new Color(255, 0, 0)
+);
+
+// Generate QR Code with logo + label
 $result = $writer->write($qrCode, $logo, $label);
 
 // Save to file
