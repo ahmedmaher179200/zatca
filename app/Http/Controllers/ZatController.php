@@ -141,7 +141,7 @@ $writer = new PngWriter();
 
 // Logo (use constructor instead of ::create)
 $logo = new Logo(
-    path: ROOT_PATH . '/ZATCA/assets/logo.png',
+    path: public_path('logo.jpg'),
     resizeToWidth: 50,
     punchoutBackground: true
 );
@@ -156,7 +156,7 @@ $label = new Label(
 $result = $writer->write($qrCode, $logo, $label);
 
 // Save to file
-$result->saveToFile(ROOT_PATH . '/ZATCA/assets/phase-2.png');
+$result->saveToFile(public_path('assets/phase-2.png'));
 
 header('Content-Type: ' . $result->getMimeType()); 
        // return redirect()->route('task.create');
