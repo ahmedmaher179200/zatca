@@ -12,6 +12,7 @@ use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
+use Illuminate\Support\Facades\Http;
 
 const ROOT_PATH=__DIR__ ;
 
@@ -152,32 +153,30 @@ class ZatController extends Controller
         $payload = [
             'invoiceHash' => $invoice_hash,
             'uuid'        => $egs_unit['uuid'],
-            'invoice'     => base64_encode($signed_invoice_string), // single encode only
+            'invoice'     => base64_encode($signed_invoice_string), // only once!
         ];
 
-        $curl = curl_init('https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single');
+        try {
+            $response = Http::withHeaders([
+                'Accept-Version' => 'V2',
+                'Content-Type'   => 'application/json',
+                'Authorization'  => 'Bearer ' . $binary_security_token,
+            ])->withOptions([
+                'verify' => true, // SSL verify
+                'version' => CURL_SSLVERSION_TLSv1_2, // enforce TLS 1.2
+            ])->post('https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single', $payload);
 
-        curl_setopt_array($curl, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST           => true,
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_POSTFIELDS     => json_encode($payload),
-            CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_SSLVERSION     => CURL_SSLVERSION_TLSv1_2,
-            CURLOPT_VERBOSE        => true, // debug
-        ]);
+            // Print raw response
+            return response()->json([
+                'status'   => $response->status(),
+                'response' => $response->json(),
+            ]);
 
-        $response = curl_exec($curl);
-
-        if (curl_errno($curl)) {
-            echo "cURL Error #: " . curl_errno($curl) . " - " . curl_error($curl) . "\n";
-        } else {
-            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-            echo "HTTP Code: $httpCode\n";
-            echo "Response: " . $response . "\n";
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ]);
         }
-
-        curl_close($curl);
 
     }
 }
