@@ -125,27 +125,28 @@ if (file_put_contents($file_path, $signed_invoice_string) !== false) {
 
 
 // Generate QR Code
-$qrCode = new QrCode($qr);
-$qrCode->setEncoding(new Encoding('UTF-8'))
-    ->setErrorCorrectionLevel(new ErrorCorrectionLevelHigh())
-    ->setSize(300)
-    ->setMargin(10)
-    ->setForegroundColor(new Color(0, 0, 0))
-    ->setBackgroundColor(new Color(255, 255, 255));
+$qrCode = new QrCode(
+    data: $qr,
+    encoding: new Encoding('UTF-8'),
+    size: 300,
+    margin: 10,
+    foregroundColor: new Color(0, 0, 0),
+    backgroundColor: new Color(255, 255, 255)
+);
 
-// Create Writer
+// Writer
 $writer = new PngWriter();
 
-// Add Logo
+// Logo
 $logo = Logo::create(ROOT_PATH . '/ZATCA/assets/logo.png')
     ->setResizeToWidth(50)
     ->setPunchoutBackground(true);
 
-// Add Label
+// Label
 $label = Label::create('Qr Phase-2')
     ->setTextColor(new Color(255, 0, 0));
 
-// Generate QR Code with logo + label
+// Generate QR Code
 $result = $writer->write($qrCode, $logo, $label);
 
 // Save to file
