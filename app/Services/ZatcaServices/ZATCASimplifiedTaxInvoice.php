@@ -18,7 +18,6 @@ class ZATCASimplifiedTaxInvoice
 
     public function simplifiedTaxInvoice(array $invoice, array $egs_unit)
     {
-        dd(ROOT_PATH . '/templates/simplified_tax_invoice_template.php');
         $populated_template = require ROOT_PATH . '/templates/simplified_tax_invoice_template.php';
 
         $populated_template = str_replace('SET_INVOICE_TYPE', $this->ZATCAInvoiceTypes[$egs_unit['cancelation']['cancelation_type']], trim($populated_template));
