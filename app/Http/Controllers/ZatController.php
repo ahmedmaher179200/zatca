@@ -71,10 +71,6 @@ class ZatController extends Controller
         
         // Issue a new compliance cert for the EGS
         list($request_id, $binary_security_token, $secret) = $egs->issueComplianceCertificate('123345', $csr);
-        dd([
-            'request_id' => $request_id,
-            'binary_security_token' => $binary_security_token
-        ]);
         //echo 'secret:' . $secret . "<br>";
         // Sign invoice
         list($signed_invoice_string, $invoice_hash, $qr,$public_key) = $egs->signInvoice($invoice, $egs_unit, $binary_security_token, $private_key);
