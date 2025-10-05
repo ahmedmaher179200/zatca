@@ -9,8 +9,6 @@ use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
 use Illuminate\Support\Facades\Http;
 
-const ROOT_PATH=__DIR__ ;
-
 class ZatController extends Controller
 {
     
