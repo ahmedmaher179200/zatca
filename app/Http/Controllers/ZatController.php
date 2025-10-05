@@ -1,18 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use Mohammad\Zatca\ZATCA\EGS;
-
-use DOMDocument;
-use Exception;
 
 use Endroid\QrCode\QrCode;
-use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\Color\Color;
-use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
 use Illuminate\Support\Facades\Http;
+use Services\ZatcaServices\EGS;
 
 const ROOT_PATH=__DIR__ ;
 
@@ -116,24 +111,24 @@ class ZatController extends Controller
 
 
         // Generate QR Code
-        $qrCode = new QrCode(
-            data: $qr,
-            encoding: new Encoding('UTF-8'),
-            size: 300,
-            margin: 10,
-            foregroundColor: new Color(0, 0, 0),
-            backgroundColor: new Color(255, 255, 255)
-        );
+        // $qrCode = new QrCode(
+        //     data: $qr,
+        //     encoding: new Encoding('UTF-8'),
+        //     size: 300,
+        //     margin: 10,
+        //     foregroundColor: new Color(0, 0, 0),
+        //     backgroundColor: new Color(255, 255, 255)
+        // );
 
-        // Writer
-        $writer = new PngWriter();
-        $result = $writer->write($qrCode);
+        // // Writer
+        // $writer = new PngWriter();
+        // $result = $writer->write($qrCode);
         // Save to file
-        $dir = public_path('assets');
-        if (!is_dir($dir)) {
-            mkdir($dir, 0777, true); // true = recursive
-        }
-        $result->saveToFile(public_path('assets/phase-2.png'));
+        // $dir = public_path('assets');
+        // if (!is_dir($dir)) {
+        //     mkdir($dir, 0777, true); // true = recursive
+        // }
+        // $result->saveToFile(public_path('assets/phase-2.png'));
         //echo 'qr code saved:' . public_path('assets/phase-2.png') . "<br>";
 
         // =====================
