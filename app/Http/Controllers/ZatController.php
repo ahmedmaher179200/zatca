@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ZatcaServices\EGS;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
 use Illuminate\Support\Facades\Http;
-use Mohammad\Zatca\ZATCA\EGS;
 
 const ROOT_PATH=__DIR__ ;
 
