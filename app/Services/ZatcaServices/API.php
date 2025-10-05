@@ -56,7 +56,7 @@ class API
             $response = json_decode($response);
             if ($http_code != 200) throw new Exception('Error issuing a compliance certificate.');
             $issued_certificate = base64_decode($response->binarySecurityToken);
-            $response->binarySecurityToken = $response->binarySecurityToken;
+            $response->binarySecurityToken = "-----BEGIN CERTIFICATE-----\n{$issued_certificate}\n-----END CERTIFICATE-----";
 
             return $response;
         };
