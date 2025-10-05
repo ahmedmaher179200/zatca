@@ -38,10 +38,9 @@ class ZatController extends Controller
         list($private_key, $csr) = $egs->generateNewKeysAndCSR('Qr');
         
         // Issue a new compliance cert for the EGS
-        list($request_id, $binary_security_token, $secret) = $egs->issueComplianceCertificate('123345', $csr);
+        list($request_id, $binary_security_token_certificate, $secret, $binary_security_token) = $egs->issueComplianceCertificate('123345', $csr);
         // Sign invoice
-        list($signed_invoice_string, $invoice_hash, $qr,$public_key) = $egs->signInvoice($invoice, $egs_unit, $binary_security_token, $private_key);
-        $base64_encoded = base64_encode($signed_invoice_string);
+        list($signed_invoice_string, $invoice_hash, $qr,$public_key) = $egs->signInvoice($invoice, $egs_unit, $binary_security_token_certificate, $private_key);
 
         $file_path = storage_path('app/invoices//'.$egs_unit['uuid'].'.xml');
 
@@ -55,7 +54,7 @@ class ZatController extends Controller
         // =====================
         // 2. Prepare the headers
         // =====================
-        $url = 'https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single';
+        $url = env('zatca_url') . '/invoices/reporting/single';
         $payload = [
             'invoiceHash' => $invoice_hash,
             'uuid'        => $egs_unit['uuid'],
@@ -69,7 +68,10 @@ class ZatController extends Controller
             'Accept-Language' => 'en',
         ];
 
-        $response = Http::withHeaders($headers)->post($url, $payload);
+        // $secret = env('ZATCA_PASSWORD');
+        $response = Http::withBasicAuth($binary_security_token, $secret)
+                            ->withHeaders($headers)
+                            ->post($url, $payload);
 
         if ($response->successful()) {
             return $response->json(); // returns array

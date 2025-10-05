@@ -127,7 +127,7 @@ class EGS
         list($issueCertificate, $checkInvoiceCompliance) = $this->api->compliance();
         $issued_data = $issueCertificate($csr, $otp);
 
-        return [$issued_data->requestID, $issued_data->binarySecurityToken, $issued_data->secret];
+        return [$issued_data->requestID, $issued_data->binary_security_token_certificate, $issued_data->secret, $issued_data->binarySecurityToken];
     }
 
     public function signInvoice(array $invoice, array $egs_unit, string $certificate, string $private_key): array
