@@ -41,12 +41,12 @@ class EGS
     private function generateCSR(string $solution_name, $private_key)
     {
         if (!$private_key) throw new Exception('EGS has no private key');
-        if (!is_dir(base_path() . '/tmp/')) {
-            mkdir(base_path() . '/tmp/', 0775);
+        if (!is_dir(storage_path('app/tmp'))) {
+            mkdir(storage_path('app/tmp'), 0775, true); // 'true' ensures nested directories are created if needed
         }
 
-        $private_key_file_name = base_path() . '/tmp/' . self::uuid() . '.pem';
-        $csr_config_file_name = base_path() . '/tmp/' . self::uuid() . '.cnf';
+        $private_key_file_name = storage_path('app/tmp/' . self::uuid() . '.pem');
+        $csr_config_file_name = storage_path('app/tmp/' . self::uuid() . '.cnf');
 
         $private_key_file = fopen($private_key_file_name, 'w');
         $csr_config_file = fopen($csr_config_file_name, 'w');

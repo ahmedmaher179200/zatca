@@ -7,8 +7,13 @@ use stdClass;
 
 class API
 {
-    private string $sandbox_url = 'https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal';
+    private string $sandbox_url;
     private string $version = 'V2';
+
+    public function __construct()
+    {
+        $this->sandbox_url = env('zatca_url');
+    }
 
     private function getAuthHeaders($certificate, $secret): array
     {
