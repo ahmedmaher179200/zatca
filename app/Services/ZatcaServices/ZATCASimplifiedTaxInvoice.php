@@ -100,13 +100,6 @@ class ZATCASimplifiedTaxInvoice
 
         $x509 = openssl_x509_parse($wrapped_certificate_string);
 
-        // Signature, and public key extraction from x509 PEM certificate (asn1 rfc5280)
-        // Crypto module does not have those functionalities so i'm the crypto boy now :(
-        // https://github.com/nodejs/node/blob/main/crypto/crypto_x509.cc
-        // https://linuxctl.com/2017/02/x509-certificate-manual-signature-verification/
-        // https://github.com/junkurihara/js-x509-utils/blob/develop/x509.js
-        // decode binary x509-formatted object
-
         $res = openssl_get_publickey($wrapped_certificate_string);
         $cert = openssl_pkey_get_details($res);
 
