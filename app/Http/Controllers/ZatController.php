@@ -8,7 +8,6 @@ use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
 use Illuminate\Support\Facades\Http;
-use Mohammad\Zatca\ZATCA\EGS as ZATCAEGS;
 
 class ZatController extends Controller
 {
@@ -64,7 +63,7 @@ class ZatController extends Controller
             $invoice['line_items'][] = $line_items[$i];
         }
 
-        $egs = new ZATCAEGS($egs_unit);
+        $egs = new EGS($egs_unit);
         $egs->production = false;
         list($private_key, $csr) = $egs->generateNewKeysAndCSR('Qr');
         //echo 'Private Key:' . $private_key . "<br>";
