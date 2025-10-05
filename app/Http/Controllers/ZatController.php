@@ -159,7 +159,6 @@ class ZatController extends Controller
         if ($response->successful()) {
             return $response->json(); // returns array
         } else {
-            dd('test');
             return [
                 'status' => $response->status(),
                 'body' => $response->body()
