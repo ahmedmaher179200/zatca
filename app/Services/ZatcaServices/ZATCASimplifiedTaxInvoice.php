@@ -95,7 +95,6 @@ class ZATCASimplifiedTaxInvoice
     {
         $cleaned_certificate_string = $this->cleanUpCertificateString($certificate_string);
         $wrapped_certificate_string = "-----BEGIN CERTIFICATE-----\n{$cleaned_certificate_string}\n-----END CERTIFICATE-----";
-        dd($wrapped_certificate_string);
 
         $hash = $this->getCertificateHash($cleaned_certificate_string);
 
