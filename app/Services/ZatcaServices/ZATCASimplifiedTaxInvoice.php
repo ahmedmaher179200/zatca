@@ -95,13 +95,13 @@ class ZATCASimplifiedTaxInvoice
     {
         $cleaned_certificate_string = $this->cleanUpCertificateString($certificate_string);
         $wrapped_certificate_string = "-----BEGIN CERTIFICATE-----\n{$cleaned_certificate_string}\n-----END CERTIFICATE-----";
+        dd($wrapped_certificate_string);
 
         $hash = $this->getCertificateHash($cleaned_certificate_string);
 
         $x509 = openssl_x509_parse($wrapped_certificate_string);
 
         $res = openssl_get_publickey($wrapped_certificate_string);
-        dd($res);
         $cert = openssl_pkey_get_details($res);
 
         $public_key = str_replace(['-----BEGIN PUBLIC KEY-----', '-----END PUBLIC KEY-----'], '', $cert['key']);
