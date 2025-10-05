@@ -124,7 +124,6 @@ class ZatController extends Controller
             foregroundColor: new Color(0, 0, 0),
             backgroundColor: new Color(255, 255, 255)
         );
-            dd('test');
 
         // Writer
         $writer = new PngWriter();
