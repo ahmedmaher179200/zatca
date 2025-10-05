@@ -84,7 +84,7 @@ class ZatController extends Controller
         //echo 'csr:' . $csr . "<br>";
         
         // Issue a new compliance cert for the EGS
-        list($request_id, $binary_security_token, $secret, $binarySecurityToken2) = $egs->issueComplianceCertificate('123345', $csr);
+        list($request_id, $binary_security_token, $secret) = $egs->issueComplianceCertificate('123345', $csr);
         //echo 'secret:' . $secret . "<br>";
         // Sign invoice
         list($signed_invoice_string, $invoice_hash, $qr,$public_key) = $egs->signInvoice($invoice, $egs_unit, $binary_security_token, $private_key);
@@ -124,47 +124,47 @@ class ZatController extends Controller
             foregroundColor: new Color(0, 0, 0),
             backgroundColor: new Color(255, 255, 255)
         );
+            dd('test');
 
         // Writer
         $writer = new PngWriter();
         $result = $writer->write($qrCode);
         // Save to file
+        $dir = public_path('assets');
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true); // true = recursive
+        }
         $result->saveToFile(public_path('assets/phase-2.png'));
         //echo 'qr code saved:' . public_path('assets/phase-2.png') . "<br>";
-
-
-        $payload = [
-            'invoiceHash' => $invoice_hash,
-            'uuid'        => $egs_unit['uuid'],
-            'invoice'     => $base64_encoded,
-        ];
 
         // =====================
         // 2. Prepare the headers
         // =====================
+        $url = 'https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single';
         $payload = [
             'invoiceHash' => $invoice_hash,
             'uuid'        => $egs_unit['uuid'],
             'invoice'     => base64_encode($signed_invoice_string), // only once!
         ];
-        $response = Http::withOptions([
-            'version' => CURL_HTTP_VERSION_1_1, // 👈 force HTTP/1.1
-        ])->withHeaders([
+
+        // Optional: Headers
+        $headers = [
             'Content-Type'   => 'application/json',
             'Accept-Version' => 'V2',
-            'Authorization'  => 'Bearer ' . $binarySecurityToken2,
-            'Accept-Language: en',
-        ])->post('https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/invoices/reporting/single', [
-            'invoiceHash' => $invoice_hash,
-            'uuid'        => $egs_unit['uuid'],
-            'invoice'     => $base64_encoded,
-        ]);
-        // Print raw response
-        return response()->json([
-            'status'   => $response->status(),
-            'json'     => $response->json(),   // parsed JSON (if valid)
-            'body'     => $response->body(),   // raw body (always)
-        ]);
+            'Authorization'  => 'Bearer ' . $binary_security_token,
+            'Accept-Language' => 'en',
+        ];
 
+        $response = Http::withHeaders($headers)->post($url, $payload);
+
+        if ($response->successful()) {
+            return $response->json(); // returns array
+        } else {
+            dd('test');
+            return [
+                'status' => $response->status(),
+                'body' => $response->body()
+            ];
+        }
     }
 }
