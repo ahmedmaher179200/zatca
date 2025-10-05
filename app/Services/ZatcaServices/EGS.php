@@ -139,7 +139,7 @@ class EGS
         $invoice_xml = $zatca_simplified_tax_invoice->simplifiedTaxInvoice($invoice, $egs_unit);
 
         $invoice_hash = $zatca_simplified_tax_invoice->getInvoiceHash($invoice_xml);
-        dd($invoice_hash);
+        
         list($hash, $issuer, $serialNumber, $public_key, $signature)
             = $zatca_simplified_tax_invoice->getCertificateInfo($certificate);
 
