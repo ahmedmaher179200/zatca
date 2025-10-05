@@ -41,7 +41,6 @@ class EGS
     private function generateCSR(string $solution_name, $private_key)
     {
         if (!$private_key) throw new Exception('EGS has no private key');
-
         if (!is_dir(base_path() . '/tmp/')) {
             mkdir(base_path() . '/tmp/', 0775);
         }
