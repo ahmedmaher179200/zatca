@@ -150,7 +150,7 @@ class ZatController extends Controller
         $headers = [
             'Content-Type'   => 'application/json',
             'Accept-Version' => 'V2',
-            'Authorization'  => 'Bearer ' . $binary_security_token,
+            'Authorization'  => 'Bearer ' . 'ss',
             'Accept-Language' => 'en',
         ];
 
