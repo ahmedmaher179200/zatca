@@ -101,6 +101,7 @@ class ZATCASimplifiedTaxInvoice
         $x509 = openssl_x509_parse($wrapped_certificate_string);
 
         $res = openssl_get_publickey($wrapped_certificate_string);
+        dd($res);
         $cert = openssl_pkey_get_details($res);
 
         $public_key = str_replace(['-----BEGIN PUBLIC KEY-----', '-----END PUBLIC KEY-----'], '', $cert['key']);
