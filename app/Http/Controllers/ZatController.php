@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ZatcaServices\EGS;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
 use Illuminate\Support\Facades\Http;
-use Services\ZatcaServices\EGS;
 
 const ROOT_PATH=__DIR__ ;
 
@@ -66,14 +66,7 @@ class ZatController extends Controller
         }
 
         $egs = new EGS($egs_unit);
-
-
         $egs->production = false;
-
-        // New Keys & CSR for the EGS
-        /*list($private_key, $csr) = $egs->generateNewKeysAndCSR('Qr');
-        //echo $private_key;
-        //echo */
         list($private_key, $csr) = $egs->generateNewKeysAndCSR('Qr');
         //echo 'Private Key:' . $private_key . "<br>";
         //echo 'csr:' . $csr . "<br>";

@@ -2,7 +2,7 @@
 
 namespace Services\ZatcaServices\Tags;
 
-use Services\ZatcaServices\Tag;
+use App\Services\ZatcaServices\Tag;
 
 class TaxNumber extends Tag
 {

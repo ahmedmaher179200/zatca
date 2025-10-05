@@ -1,6 +1,6 @@
 <?php
 
-namespace Services\ZatcaServices;
+namespace App\Services\ZatcaServices;
 
 use Exception;
 use stdClass;
