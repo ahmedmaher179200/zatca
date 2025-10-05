@@ -145,12 +145,12 @@ class ZatController extends Controller
             'uuid'        => $egs_unit['uuid'],
             'invoice'     => base64_encode($signed_invoice_string), // only once!
         ];
-
+        dd($payload);
         // Optional: Headers
         $headers = [
             'Content-Type'   => 'application/json',
             'Accept-Version' => 'V2',
-            'Authorization'  => 'Bearer ' . 'ss',
+            'Authorization'  => 'Bearer ' . $binary_security_token,
             'Accept-Language' => 'en',
         ];
 
